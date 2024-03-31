@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div
+  style="display: flex; align-items: center; flex-direction: column; height: 100vh; justify-content: center"
+>
+<h1>Travel With Me</h1>
+<h2>Remove your data</h2>
+<form
+  style="display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 600px"
+  id="form"
+>
+<input
+  type="text"
+  placeholder="E-mail"
+  id="email"
+/>
+<input
+  type="password"
+  placeholder="Password"
+  id="password"
+/>
+<button type="submit">Confirm</button>
+</form>
+</div>
+
+<script>
+
+  let email = document.getElementById('email');
+	let password = document.getElementById('password');
+
+	function onSubmit(event) {
+		event.preventDefault();
+		if (!email.value || !password.value) {
+      alert('Please fill in all fields');
+      return;
+    }
+
+		fetch('https://api.underhood.space/auth/remove-data', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email.value,
+        password: password.value,
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          alert('Data removed successfully');
+	        password.value = '';
+	        email.value = '';
+        } else {
+          alert('Failed to remove data');
+        }
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+	}
+
+	let form = document.getElementById('form');
+
+	form.onsubmit = onSubmit;
+
+</script>
+</body>
+</html>
